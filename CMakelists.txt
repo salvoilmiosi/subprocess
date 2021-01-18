@@ -1,6 +1,6 @@
-set(SOURCES_SUBPROCESS
+set(subprocess_SRCS
 src/proc_linux.cpp
 src/proc_windows.cpp
 )
 
-add_library(subprocess STATIC ${SOURCES_SUBPROCESS})
+add_library(subprocess STATIC ${subprocess_SRCS})
