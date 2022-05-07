@@ -6,12 +6,16 @@
 #ifdef _WIN32
 
 #include "proc_windows.h"
-using subprocess = windows_process;
+namespace subprocess {
+using process = windows_process;
+}
 
 #else
 
 #include "proc_linux.h"
-using subprocess = linux_process;
+namespace subprocess {
+using process = linux_process;
+}
 
 #endif
 

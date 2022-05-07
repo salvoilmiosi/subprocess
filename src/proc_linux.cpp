@@ -7,6 +7,8 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+namespace subprocess {
+
 void linux_pipe::init() {
     close();
     if (::pipe(m_handles) < 0) {
@@ -70,21 +72,32 @@ void linux_process::close() {
     child_pid = 0;
 }
 
+linux_process::operator bool() const {
+    if (!child_pid) {
+        return false;
+    }
+    int status;
+    return waitpid(child_pid, &status, WNOHANG) == 0;
+}
+
 int linux_process::wait_finished() {
     int status;
     if (::waitpid(child_pid, &status, 0) == -1) {
-        throw process_error("Errore in waitpid");
+        throw process_error("Error in waitpid");
     }
 
     if (WIFEXITED(status)) {
         return WEXITSTATUS(status);
     } else {
-        throw process_error("Impossibile ottenere exit code");
+        throw process_error("Could not get exit code");
     }
 }
 
 void linux_process::abort() {
     ::kill(child_pid, SIGTERM);
+    close();
+}
+
 }
 
 #endif

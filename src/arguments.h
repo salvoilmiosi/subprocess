@@ -5,6 +5,8 @@
 #include <cstddef>
 #include <cassert>
 
+namespace subprocess {
+
 template<typename T>
 concept string_t = requires (T str) {
     { str.c_str() } -> std::convertible_to<const char*>;
@@ -53,5 +55,7 @@ public:
 };
 
 template<typename ... Ts> arguments(const Ts & ... args) -> arguments<sizeof ... (args)>;
+
+}
 
 #endif

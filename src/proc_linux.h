@@ -3,6 +3,8 @@
 
 #include "pipe_io.h"
 
+namespace subprocess {
+
 class linux_pipe {
 public:
     void init();
@@ -26,15 +28,16 @@ public:
     linux_process();
     linux_process(const char *args[]);
 
+    ~linux_process() {
+        abort();
+    }
+
 public:
     void open(const char *args[]);
     void close();
     int wait_finished();
     void abort();
-
-    explicit operator bool() const {
-        return child_pid != 0;
-    }
+    explicit operator bool() const;
 
 private:
     linux_pipe pipe_stdout, pipe_stdin, pipe_stderr;
@@ -44,5 +47,7 @@ public:
     pipe_istream<linux_pipe> stream_out, stream_err;
     pipe_ostream<linux_pipe> stream_in;
 };
+
+}
 
 #endif

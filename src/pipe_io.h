@@ -9,10 +9,12 @@
 #define PIPE_READ 0
 #define PIPE_WRITE 1
 
+namespace subprocess {
+
 constexpr size_t BUFSIZE = 4096;
 
 struct process_error : std::runtime_error {
-    process_error(const std::string &message) : std::runtime_error(message) {}
+    using std::runtime_error::runtime_error;
 };
 
 template<typename pipe_t>
@@ -105,6 +107,8 @@ std::streambuf::int_type pipe_ostreambuf<pipe_t>::overflow(std::streambuf::int_t
 template<typename pipe_t>
 int pipe_ostreambuf<pipe_t>::sync() {
     return pptr() != pbase() && m_pipe.write(pptr() - pbase(), pbase()) <= 0 ? -1 : 0;
+}
+
 }
 
 #endif // __SUBPROCESS_H__

@@ -2,6 +2,8 @@
 
 #include "proc_windows.h"
 
+namespace subprocess {
+
 void windows_pipe::init(SECURITY_ATTRIBUTES &attrs, int which) {
     close();
     if (!CreatePipe(&m_handles[PIPE_READ], &m_handles[PIPE_WRITE], &attrs, 0)
@@ -133,21 +135,31 @@ void windows_process::close() {
     }
 }
 
-windows_process::~windows_process() {
-    close();
+windows_process::operator bool () const {
+    if (!process) {
+        return false;
+    }
+    DWORD exit_code;
+    if (!GetExitCodeProcess(process, &exit_code)) {
+        throw process_error("Could not get exit code");
+    }
+    return exit_code == STILL_ACTIVE;
 }
 
 int windows_process::wait_finished() {
     WaitForSingleObject(process, INFINITE);
     DWORD exit_code;
     if (!GetExitCodeProcess(process, &exit_code)) {
-        throw process_error("Impossibile ottenere exit code");
+        throw process_error("Could not get exit code");
     }
     return exit_code;
 }
 
 void windows_process::abort() {
     TerminateProcess(process, 1);
+    close();
+}
+
 }
 
 #endif
