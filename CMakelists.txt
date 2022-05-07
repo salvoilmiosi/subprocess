@@ -1,6 +1,10 @@
-set(subprocess_SRCS
-src/proc_linux.cpp
-src/proc_windows.cpp
-)
+cmake_minimum_required(VERSION 3.6.0)
+project(subprocess VERSION 0.1.0)
 
-add_library(subprocess STATIC ${subprocess_SRCS})
+if(WIN32)
+    set(subprocess_src src/proc_windows.cpp)
+else()
+    set(subprocess_src src/proc_linux.cpp)
+endif()
+
+add_library(subprocess STATIC ${subprocess_src})

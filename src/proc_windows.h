@@ -1,8 +1,6 @@
 #ifndef __PROC_WINDOWS_H__
 #define __PROC_WINDOWS_H__
 
-#ifdef _WIN32
-
 #include "pipe_io.h"
 #include <windows.h>
 
@@ -36,6 +34,10 @@ public:
     int wait_finished();
     void abort();
 
+    explicit operator bool() const {
+        return process != nullptr;
+    }
+
 private:
     windows_pipe pipe_stdout, pipe_stderr, pipe_stdin;
     HANDLE process = nullptr;
@@ -45,5 +47,4 @@ public:
     pipe_ostream<windows_pipe> stream_in;
 };
 
-#endif
 #endif

@@ -1,8 +1,6 @@
 #ifndef __PROC_LINUX_H__
 #define __PROC_LINUX_H__
 
-#ifdef __linux__
-
 #include "pipe_io.h"
 
 class linux_pipe {
@@ -34,6 +32,10 @@ public:
     int wait_finished();
     void abort();
 
+    explicit operator bool() const {
+        return child_pid != 0;
+    }
+
 private:
     linux_pipe pipe_stdout, pipe_stdin, pipe_stderr;
     int child_pid = 0;
@@ -43,5 +45,4 @@ public:
     pipe_ostream<linux_pipe> stream_in;
 };
 
-#endif
 #endif
