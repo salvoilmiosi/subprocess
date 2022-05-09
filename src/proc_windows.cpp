@@ -156,7 +156,9 @@ int windows_process::wait_finished() {
 }
 
 void windows_process::abort() {
-    TerminateProcess(process, 1);
+    if (bool(*this)) {
+        TerminateProcess(process, 1);
+    }
     close();
 }
 

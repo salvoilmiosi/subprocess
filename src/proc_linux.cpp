@@ -94,7 +94,9 @@ int linux_process::wait_finished() {
 }
 
 void linux_process::abort() {
-    ::kill(child_pid, SIGTERM);
+    if (bool(*this)) {
+        ::kill(child_pid, SIGTERM);
+    }
     close();
 }
 
