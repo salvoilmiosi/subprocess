@@ -9,4 +9,3 @@ endif()
 
 add_library(subprocess OBJECT ${subprocess_src})
 target_include_directories(subprocess PUBLIC src)
-set_property(TARGET subprocess PROPERTY POSITION_INDEPENDENT_CODE ON)
